@@ -96,7 +96,6 @@ public class SignUp extends AppCompatActivity {
                     return;
                 }
 
-                    User user = new User(fname, lname, cname, iname, eml, pss);
 
                     pbar.setVisibility(View.VISIBLE);
                     fauth.createUserWithEmailAndPassword(eml,pss).addOnCompleteListener(new OnCompleteListener<AuthResult>() {

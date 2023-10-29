@@ -9,7 +9,6 @@
     tools:openDrawer="start"
     android:id="@+id/dlayout">
 
-
     <include layout="@layout/toolbar"/>
     <include layout="@layout/bottomnavbar"/>
     <com.google.android.material.navigation.NavigationView

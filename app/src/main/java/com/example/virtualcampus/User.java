@@ -1,16 +1,14 @@
 package com.example.virtualcampus;
 
 public class User {
-    String FirstName,LastName,Country,Institute,Email,Password;
+    String Name,Institute,Country,Profilepic;
 
 
-    User(String fn,String ln,String Cn,String In,String em,String ps)
+    User(String nm,String Cn,String In,String dp)
     {
-        FirstName=fn;
-        LastName=ln;
+        Name=nm;
         Country=Cn;
         Institute=In;
-        Email=em;
-        Password=ps;
+        Profilepic=dp;
     }
 }

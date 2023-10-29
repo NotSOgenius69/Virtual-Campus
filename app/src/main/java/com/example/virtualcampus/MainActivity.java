@@ -10,6 +10,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,6 +25,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,42 +34,53 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 
+import me.ibrahimsn.lib.OnItemSelectedListener;
+
 public class MainActivity extends AppCompatActivity {
 
     DrawerLayout dlay;
     NavigationView navview;
 
     Toolbar toolbar;
-    ImageView hamicon;
+    ImageView hamicon,newpost;
+    TextView tbtitle;
+    me.ibrahimsn.lib.SmoothBottomBar btnav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //finding ids
         dlay=findViewById(R.id.dlayout);
         navview=findViewById(R.id.naviview);
         toolbar=findViewById(R.id.tbar);
         hamicon=findViewById(R.id.hamburgericon);
+        btnav=findViewById(R.id.bottomBar);
+        tbtitle=findViewById(R.id.toolbartitle);
+        newpost=findViewById(R.id.Createnew);
 
+
+        newpost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadfrag(new CreateNewFragment(),false,"Create Post");
+            }
+        });
+//TOOLBAR SETUP//START
+
+      //setting toolbar and nav drawer
       setSupportActionBar(toolbar);
        getSupportActionBar().setTitle(null);
+
+//TOOLBAR SETUP//FINISH
+
+//NAVIGATION DRAWER SETUP//START
         ActionBarDrawerToggle toggle=new ActionBarDrawerToggle(MainActivity.this,dlay,toolbar,R.string.OpenDrawer,R.string.CloseDrawer);
         dlay.addDrawerListener(toggle);
         toggle.syncState();
         toggle.setDrawerIndicatorEnabled(false);
-        /*Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.bars, MainActivity.this.getTheme());
-        toggle.setHomeAsUpIndicator(drawable);
-        toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (dlay.isDrawerVisible(GravityCompat.START)) {
-                    dlay.closeDrawer(GravityCompat.START);
-                } else {
-                    dlay.openDrawer(GravityCompat.START);
-                }
-            }
-        });*/
+        //Listener for nav drawer
         hamicon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,8 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-
+        //Item select listener for nav menu
         navview.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -99,6 +113,35 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+//NAVIGATION DRAWER SETUP//FINISH
+
+//BOTTOM NAVIGATION BAR//START
+
+        btnav.setItemActiveIndex(1);
+        loadfrag(new DiscussionFragment(),true,"Discussions");
+        btnav.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public boolean onItemSelect(int indx) {
+                if(indx==0)
+                {
+                    loadfrag(new RepositoryFragment(),false,"Repository");
+                }
+                else if (indx==1)
+                {
+                    loadfrag(new DiscussionFragment(),false,"Discussions");
+                }
+                else if(indx==2)
+                {
+                    loadfrag(new ProfileFragment(),false,"Profile");
+                }
+
+                return true;
+            }
+        });
+
+//BOTTOM NAVIGATION BAR//FINISH
+
 
     }
     public void logout()
@@ -129,5 +172,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         builder.show();
+    }
+
+    public void loadfrag(Fragment fragment,Boolean flg,String title)
+    {
+        tbtitle.setText(title);
+        if(!(fragment instanceof DiscussionFragment))
+        {
+            newpost.setVisibility(View.GONE);
+        }
+        else
+            newpost.setVisibility(View.VISIBLE);
+        FragmentManager fragman=getSupportFragmentManager();
+        FragmentTransaction fragtrn=fragman.beginTransaction();
+        if(flg)
+            fragtrn.add(R.id.container,fragment);
+        else
+            fragtrn.replace(R.id.container,fragment);
+
+
+
+        fragtrn.commit();
+
     }
 }
