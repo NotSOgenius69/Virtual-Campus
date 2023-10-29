@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/disc"
+        android:title="Discussions"
+        android:icon="@drawable/discussions"/>
+    <item android:id="@+id/repos"
+        android:title="Repository"
+        android:icon="@drawable/repos"/>
+    <item android:id="@+id/Profile"
+        android:title="Profile"
+        android:icon="@drawable/avatar"/>
+</menu>

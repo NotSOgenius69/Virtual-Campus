@@ -1,0 +1,27 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.VirtualCampus" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+    <style name="Theme.VirtualCampus" parent="Base.Theme.VirtualCampus" />
+
+    <style name="SplashTheme" parent="Theme.Material3.DayNight.NoActionBar">
+
+         <item name="colorPrimary">@color/splshprpl</item>
+    </style>
+    <style name="LoginTheme" parent="Theme.Material3.DayNight.NoActionBar">
+
+        <item name="colorPrimary">@color/loginclr</item>
+    </style>
+    <style name="SignUpTheme" parent="Theme.Material3.DayNight.NoActionBar">
+
+        <item name="colorPrimary">@color/signupclr</item>
+    </style>
+    <style name="Mainactivitytheme" parent="Theme.Material3.DayNight.NoActionBar">
+            <item name="colorPrimary">@color/signupclr</item>
+        <item name="colorPrimaryDark">@color/signupclr</item>
+            <item name="android:windowBackground">#D4C7F3</item>
+    </style>
+</resources>

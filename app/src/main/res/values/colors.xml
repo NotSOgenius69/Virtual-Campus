@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="purple">#9C73F8</color>
+    <color name="splshprpl">#4428AF</color>
+    <color name="loginclr">#0073FA</color>
+    <color name="signupclr">#5C45F8</color>
+    <color name="bglight">#9889FB</color>
+</resources>
