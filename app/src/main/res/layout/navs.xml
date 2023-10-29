@@ -4,6 +4,6 @@
     android:layout_height="match_parent">
 
     <include layout="@layout/navdrawer"/>
-    <include layout="@layout/bottomnav"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
