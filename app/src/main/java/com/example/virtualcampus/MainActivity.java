@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,11 +23,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -42,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     NavigationView navview;
 
     Toolbar toolbar;
-    ImageView hamicon,newpost;
+    ImageView hamicon,newpost,backbutton;
     TextView tbtitle;
     me.ibrahimsn.lib.SmoothBottomBar btnav;
 
@@ -59,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         btnav=findViewById(R.id.bottomBar);
         tbtitle=findViewById(R.id.toolbartitle);
         newpost=findViewById(R.id.Createnew);
+        backbutton=findViewById(R.id.backbtn);
 
 
         newpost.setOnClickListener(new View.OnClickListener() {
@@ -67,6 +71,14 @@ public class MainActivity extends AppCompatActivity {
                 loadfrag(new CreateNewFragment(),false,"Create Post");
             }
         });
+        backbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btnav.setItemActiveIndex(1);
+                loadfrag(new DiscussionFragment(),true,"Discussions");
+            }
+        });
+
 //TOOLBAR SETUP//START
 
       //setting toolbar and nav drawer
@@ -180,9 +192,13 @@ public class MainActivity extends AppCompatActivity {
         if(!(fragment instanceof DiscussionFragment))
         {
             newpost.setVisibility(View.GONE);
+            backbutton.setVisibility(View.VISIBLE);
         }
         else
+        {
             newpost.setVisibility(View.VISIBLE);
+            backbutton.setVisibility(View.GONE);
+        }
         FragmentManager fragman=getSupportFragmentManager();
         FragmentTransaction fragtrn=fragman.beginTransaction();
         if(flg)

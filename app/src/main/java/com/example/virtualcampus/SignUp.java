@@ -110,6 +110,7 @@ public class SignUp extends AppCompatActivity {
                                  userinfo.put("Institution",iname);
                                  userinfo.put("Email",eml);
                                  userinfo.put("Password",pss);
+                                 userinfo.put("postNo","0");
                                 DocumentReference docref=fstore.collection("users").document(uid);
                                  docref.set(userinfo).addOnSuccessListener(new OnSuccessListener<Void>() {
                                      @Override

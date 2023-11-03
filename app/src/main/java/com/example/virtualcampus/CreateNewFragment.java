@@ -1,35 +1,75 @@
 package com.example.virtualcampus;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+import me.ibrahimsn.lib.OnItemSelectedListener;
+import me.ibrahimsn.lib.SmoothBottomBar;
 
 
 public class CreateNewFragment extends Fragment {
 
+    private final int GALLERY_REQ_CODE=100;
     ImageView dp,postpic;
     EditText sub,topic,postcontent;
+
+    ProgressBar pbar;
 
     TextView usrname,usrinst,usrcont;
 
     FirebaseFirestore frstore;
     FirebaseAuth frauth;
+    FirebaseStorage frstorage;
+
+    de.hdodenhof.circleimageview.CircleImageView   attach;
+
+    ActivityResultLauncher<String> igallery;
+    ActivityResultLauncher<String> ipdf;
+
+    Uri puri;
+    Button post;
+    Boolean attachmentase=false;
+    Integer postNo;
     public CreateNewFragment() {
         // Required empty public constructor
     }
@@ -40,12 +80,23 @@ public class CreateNewFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_create_new, container, false);
+        sub=view.findViewById(R.id.subjectinput);
+        topic=view.findViewById(R.id.topicinput);
+        postcontent=view.findViewById(R.id.contentbox);
         dp=view.findViewById(R.id.profilepicture);
         usrname=view.findViewById(R.id.profilename);
         usrinst=view.findViewById(R.id.profileinst);
         usrcont=view.findViewById(R.id.profilecont);
+        attach=view.findViewById(R.id.attachment);
+        postpic=view.findViewById(R.id.postimage);
+        post=view.findViewById(R.id.postbtn);
+        pbar=view.findViewById(R.id.progbar);
         frstore=FirebaseFirestore.getInstance();
         frauth=FirebaseAuth.getInstance();
+        frstorage=FirebaseStorage.getInstance();
+
+
+
 
         String uid=frauth.getCurrentUser().getUid();
         DocumentReference dref=frstore.collection("users").document(uid);
@@ -55,9 +106,130 @@ public class CreateNewFragment extends Fragment {
                 usrname.setText(value.getString("Name"));
                 usrinst.setText(value.getString("Institution"));
                 usrcont.setText(value.getString("Country"));
+                postNo= Math.toIntExact(value.getLong("postNo"));
+            }
+        });
+        igallery = registerForActivityResult(
+                new ActivityResultContracts.GetContent(),
+                new ActivityResultCallback<Uri>() {
+                    @Override
+                    public void onActivityResult(Uri result) {
+
+                        if (result != null) {
+                            postpic.setImageURI(result);
+                            puri=result;
+                            attachmentase=true;
+                        }
+                    }
+                }
+        );
+        ipdf = registerForActivityResult(
+                new ActivityResultContracts.GetContent(),
+                new ActivityResultCallback<Uri>() {
+                    @Override
+                    public void onActivityResult(Uri result) {
+
+                        if (result != null) {
+                               postpic.setImageResource(R.drawable.pdf2);
+                               puri=result;
+                               attachmentase=true;
+                            }
+                    }
+                }
+        );
+
+        attach.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialog dialog=new Dialog(getContext());
+                dialog.setContentView(R.layout.attach_layout);
+                dialog.show();
+                Window window=dialog.getWindow();
+                window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                CardView photocard=dialog.findViewById(R.id.photoadd);
+                photocard.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        igallery.launch("image/*");
+
+                    }
+                });
+                CardView pdfcard=dialog.findViewById(R.id.pdfadd);
+                pdfcard.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        ipdf.launch("application/pdf");
+
+                    }
+                });
+            }
+        });
+
+       post.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postNo++;
+                pbar.setVisibility(view.VISIBLE);
+                dref.update("postNo",postNo);
+                String subject=sub.getText().toString().trim();
+                String Topic=topic.getText().toString().trim();
+                String Content=postcontent.getText().toString().trim();
+                StorageReference ref=frstorage.getReference().child(uid+"post"+postNo);
+
+
+                Map<String,Object>userpost=new HashMap<>();
+                if(attachmentase) {
+                    ref.putFile(puri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    userpost.put("Subject", subject);
+                                    userpost.put("Topic", Topic);
+                                    userpost.put("Content", Content);
+                                    userpost.put("uri", uri);
+                                    DocumentReference dref = frstore.collection("posts").document(uid);
+                                    dref.collection("postNo"+String.valueOf(postNo)).add(userpost).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                        @Override
+                                        public void onSuccess(DocumentReference documentReference){
+                                            Log.d("Tag", "SUCCESS");
+                                            pbar.setVisibility(view.GONE);
+                                            sub.setText("");
+                                            topic.setText("");
+                                            postcontent.setText("");
+                                            postpic.setImageDrawable(null);
+                                        }
+                                    });
+                                    Toast.makeText(getContext(), "Post Uploaded", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    });
+                }
+                else {
+
+                    userpost.put("Subject", subject);
+                    userpost.put("Topic", Topic);
+                    userpost.put("Content", Content);
+                    DocumentReference dref = frstore.collection("posts").document(uid);
+                    dref.collection("postNo"+String.valueOf(postNo)).add(userpost).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Log.d("Tag", "SUCCESS");
+                            pbar.setVisibility(view.GONE);
+                        }
+                    });
+                    Toast.makeText(getContext(), "Post Uploaded", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         return view;
 
     }
+
+
+
 }

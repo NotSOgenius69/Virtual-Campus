@@ -49,6 +49,14 @@
                     android:layout_gravity="end"
                     android:layout_marginRight="12dp"
                     android:src="@drawable/createnew" />
+                <ImageView
+                    android:id="@+id/backbtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginRight="12dp"
+                    android:visibility="gone"
+                    android:src="@drawable/back" />
 
             </androidx.appcompat.widget.Toolbar>
 
