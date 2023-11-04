@@ -80,6 +80,8 @@ public class CreateNewFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_create_new, container, false);
+
+// ID FINDS
         sub=view.findViewById(R.id.subjectinput);
         topic=view.findViewById(R.id.topicinput);
         postcontent=view.findViewById(R.id.contentbox);
@@ -91,13 +93,12 @@ public class CreateNewFragment extends Fragment {
         postpic=view.findViewById(R.id.postimage);
         post=view.findViewById(R.id.postbtn);
         pbar=view.findViewById(R.id.progbar);
+//FIREBASE INITIALIZATIONS
         frstore=FirebaseFirestore.getInstance();
         frauth=FirebaseAuth.getInstance();
         frstorage=FirebaseStorage.getInstance();
 
-
-
-
+//READING USER DATA FROM FIRESTORE
         String uid=frauth.getCurrentUser().getUid();
         DocumentReference dref=frstore.collection("users").document(uid);
         dref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -109,6 +110,8 @@ public class CreateNewFragment extends Fragment {
                 postNo= Math.toIntExact(value.getLong("postNo"));
             }
         });
+
+//OPEN IMAGE OR PDF ACTIVITY LAUNCHER
         igallery = registerForActivityResult(
                 new ActivityResultContracts.GetContent(),
                 new ActivityResultCallback<Uri>() {
@@ -137,10 +140,14 @@ public class CreateNewFragment extends Fragment {
                     }
                 }
         );
+//END OF LAUNCHERS
 
+//LISTENER FOR ATTACH BUTTON
         attach.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+           //CUSTOM DIALOGUE BOX
                 Dialog dialog=new Dialog(getContext());
                 dialog.setContentView(R.layout.attach_layout);
                 dialog.show();
@@ -166,7 +173,9 @@ public class CreateNewFragment extends Fragment {
                 });
             }
         });
+//END OF LISTENER FOR ATTACH
 
+//LISTENER FOR POST BUTTON
        post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -181,6 +190,8 @@ public class CreateNewFragment extends Fragment {
 
                 Map<String,Object>userpost=new HashMap<>();
                 if(attachmentase) {
+
+                 //UPLOADING IMAGE IN STORAGE AND FIRESTORE
                     ref.putFile(puri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -191,18 +202,26 @@ public class CreateNewFragment extends Fragment {
                                     userpost.put("Topic", Topic);
                                     userpost.put("Content", Content);
                                     userpost.put("uri", uri);
-                                    DocumentReference dref = frstore.collection("posts").document(uid);
-                                    dref.collection("postNo"+String.valueOf(postNo)).add(userpost).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    DocumentReference dref1 = frstore.collection("users").document(uid);
+                                    DocumentReference dref2 = frstore.collection("posts").document(uid+"_postNo"+String.valueOf(postNo));
+                                    dref1.collection("posts").document("postNo"+String.valueOf(postNo)).set(userpost).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
-                                        public void onSuccess(DocumentReference documentReference){
-                                            Log.d("Tag", "SUCCESS");
-                                            pbar.setVisibility(view.GONE);
-                                            sub.setText("");
-                                            topic.setText("");
-                                            postcontent.setText("");
-                                            postpic.setImageDrawable(null);
+                                        public void onSuccess(Void unused) {
+                                            dref2.set(userpost).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused) {
+                                                    Log.d("Tag", "SUCCESS");
+                                                    pbar.setVisibility(view.GONE);
+                                                    sub.setText("");
+                                                    topic.setText("");
+                                                    postcontent.setText("");
+                                                    postpic.setImageDrawable(null);
+                                                }
+                                            });
                                         }
                                     });
+
+
                                     Toast.makeText(getContext(), "Post Uploaded", Toast.LENGTH_SHORT).show();
                                 }
                             });
@@ -226,6 +245,7 @@ public class CreateNewFragment extends Fragment {
                 }
             }
         });
+//END OF LISTENER FOR POST BUTTON
         return view;
 
     }
