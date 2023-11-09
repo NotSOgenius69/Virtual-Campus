@@ -1,5 +1,7 @@
 package com.example.virtualcampus;
 
+import android.net.Uri;
+
 public class User {
     String Name,Institute,Country,Profilepic;
 

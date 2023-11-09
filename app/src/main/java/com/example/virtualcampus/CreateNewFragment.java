@@ -38,6 +38,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -108,6 +109,11 @@ public class CreateNewFragment extends Fragment {
                 usrinst.setText(value.getString("Institution"));
                 usrcont.setText(value.getString("Country"));
                 postNo= Math.toIntExact(value.getLong("postNo"));
+               if(value.getString("profilepic")!="")
+                {
+                    Uri dpuri=Uri.parse(value.getString("profilepic"));
+                    Picasso.get().load(dpuri).placeholder(R.drawable.useravatar).into(dp);
+                }
             }
         });
 

@@ -41,6 +41,7 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore:24.9.1")
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("com.github.ibrahimsn98:SmoothBottomBar:1.7.9")
+    implementation("com.squareup.picasso:picasso:2.71828")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

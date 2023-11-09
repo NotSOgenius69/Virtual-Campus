@@ -111,6 +111,9 @@ public class SignUp extends AppCompatActivity {
                                  userinfo.put("Email",eml);
                                  userinfo.put("Password",pss);
                                  userinfo.put("postNo","0");
+                                userinfo.put("notesNo","0");
+                                userinfo.put("earnedCoins","0");
+                                userinfo.put("spendCoins","0");
                                 DocumentReference docref=fstore.collection("users").document(uid);
                                  docref.set(userinfo).addOnSuccessListener(new OnSuccessListener<Void>() {
                                      @Override
