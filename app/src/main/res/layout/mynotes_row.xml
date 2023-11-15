@@ -76,21 +76,18 @@
             android:id="@+id/subject"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:background="@drawable/custom_edtxt2"
             android:text="Subject"
-            android:ems="10"
-            android:padding="10dp"
-            android:layout_marginBottom="10dp"
+            android:textSize="24dp"
+            android:layout_gravity="center"
             />
 
         <TextView
             android:id="@+id/topic"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:background="@drawable/custom_edtxt2"
             android:text="Topic"
-            android:ems="10"
-            android:padding="10dp"
+            android:layout_gravity="center"
+            android:textSize="18dp"
             android:layout_marginBottom="10dp"
             />
 
@@ -98,10 +95,11 @@
             android:id="@+id/content"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:text="Content"
+            android:text="Description"
             android:ems="10"
             android:padding="10dp"
             android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
             />
 
 
@@ -109,7 +107,8 @@
             android:id="@+id/postimage"
             android:layout_width="250dp"
             android:layout_height="150dp"
-            android:scaleType="fitCenter" />
+            android:scaleType="fitCenter"
+            android:layout_gravity="center"/>
 
         <View
             android:id="@+id/divider3"
@@ -141,7 +140,7 @@
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/eye"
+                android:src="@drawable/contribution"
                 android:layout_margin="3dp"
                 android:layout_gravity="center"
                 android:layout_weight="1"

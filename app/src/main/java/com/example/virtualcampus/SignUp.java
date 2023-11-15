@@ -63,6 +63,13 @@ public class SignUp extends AppCompatActivity {
                 iname=institute.getText().toString().trim();
                 eml=email.getText().toString().trim();
                 pss=pass.getText().toString().trim();
+
+                frstname.setText("");
+                lstname.setText("");
+                country.setText("");
+                institute.setText("");
+                email.setText("");
+                pass.setText("");
                 if(fname.isEmpty()||lname.isEmpty()||cname.isEmpty()||iname.isEmpty()||eml.isEmpty()||pss.isEmpty()||pss.length()<6)
                 {
                     if(fname.isEmpty())
@@ -110,10 +117,11 @@ public class SignUp extends AppCompatActivity {
                                  userinfo.put("Institution",iname);
                                  userinfo.put("Email",eml);
                                  userinfo.put("Password",pss);
-                                 userinfo.put("postNo","0");
-                                userinfo.put("notesNo","0");
-                                userinfo.put("earnedCoins","0");
-                                userinfo.put("spendCoins","0");
+                                 userinfo.put("postNo",0);
+                                userinfo.put("notesNo",0);
+                                userinfo.put("earnedCoins",0);
+                                userinfo.put("spendCoins",0);
+                                userinfo.put("profilepic","");
                                 DocumentReference docref=fstore.collection("users").document(uid);
                                  docref.set(userinfo).addOnSuccessListener(new OnSuccessListener<Void>() {
                                      @Override

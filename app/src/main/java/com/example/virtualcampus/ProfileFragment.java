@@ -105,6 +105,10 @@ public class ProfileFragment extends Fragment {
                     Uri dpuri=Uri.parse(value.getString("profilepic"));
                     Picasso.get().load(dpuri).placeholder(R.drawable.useravatar).into(dp);
                 }
+                else
+                {
+                   dp.setImageResource(R.drawable.useravatar);
+                }
                 usrname.setText(value.getString("Name"));
                 usrinst.setText(value.getString("Institution"));
                 usrcont.setText(value.getString("Country"));

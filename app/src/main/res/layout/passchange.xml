@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
+    app:cardElevation="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="20dp">
+        <ImageView
+            android:id="@+id/cancel"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/cancel"
+            android:layout_gravity="end"/>
+        <TextView
+            android:id="@+id/chngpass"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Change Password"
+            android:textSize="24dp"
+            android:fontFamily="@font/avenirbook"
+            android:layout_marginBottom="10dp"/>
+        <EditText
+            android:id="@+id/oldpassword"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/custom_edtxt2"
+            android:hint="Enter Old password"
+            android:padding="8dp"
+            android:layout_margin="10dp"/>
+        <EditText
+            android:id="@+id/newpassword"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/custom_edtxt2"
+            android:hint="Enter New password"
+            android:inputType="textPassword"
+            android:padding="8dp"
+            android:layout_margin="10dp"/>
+        <EditText
+            android:id="@+id/reenterpassword"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/custom_edtxt2"
+            android:hint="Re-Enter new password"
+            android:inputType="textPassword"
+            android:padding="8dp"
+            android:layout_margin="10dp"/>
+        <Button
+            android:id="@+id/updatebtn"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/black"
+            android:text="Update"/>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

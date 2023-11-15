@@ -67,10 +67,11 @@ public class CreateNewFragment extends Fragment {
     ActivityResultLauncher<String> igallery;
     ActivityResultLauncher<String> ipdf;
 
+    User user;
     Uri puri;
     Button post;
     Boolean attachmentase=false;
-    Integer postNo;
+    Integer postNo,postType=0;
     public CreateNewFragment() {
         // Required empty public constructor
     }
@@ -114,6 +115,7 @@ public class CreateNewFragment extends Fragment {
                     Uri dpuri=Uri.parse(value.getString("profilepic"));
                     Picasso.get().load(dpuri).placeholder(R.drawable.useravatar).into(dp);
                 }
+
             }
         });
 
@@ -127,6 +129,7 @@ public class CreateNewFragment extends Fragment {
                         if (result != null) {
                             postpic.setImageURI(result);
                             puri=result;
+                            postType=1;
                             attachmentase=true;
                         }
                     }
@@ -141,6 +144,7 @@ public class CreateNewFragment extends Fragment {
                         if (result != null) {
                                postpic.setImageResource(R.drawable.pdf2);
                                puri=result;
+                               postType=2;
                                attachmentase=true;
                             }
                     }
@@ -185,9 +189,8 @@ public class CreateNewFragment extends Fragment {
        post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                postNo++;
-                pbar.setVisibility(view.VISIBLE);
-                dref.update("postNo",postNo);
+                pbar.setVisibility(View.VISIBLE);
+                dref.update("postNo",++postNo);
                 String subject=sub.getText().toString().trim();
                 String Topic=topic.getText().toString().trim();
                 String Content=postcontent.getText().toString().trim();
@@ -195,9 +198,8 @@ public class CreateNewFragment extends Fragment {
 
 
                 Map<String,Object>userpost=new HashMap<>();
-                if(attachmentase) {
 
-                 //UPLOADING IMAGE IN STORAGE AND FIRESTORE
+//UPLOADING IMAGE IN STORAGE AND FIRESTORE
                     ref.putFile(puri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -207,17 +209,22 @@ public class CreateNewFragment extends Fragment {
                                     userpost.put("Subject", subject);
                                     userpost.put("Topic", Topic);
                                     userpost.put("Content", Content);
-                                    userpost.put("uri", uri);
+                                    userpost.put("postType",postType);
+                                    if(attachmentase)
+                                      userpost.put("uri", uri);
+                                    else
+                                        userpost.put("uri","");
                                     DocumentReference dref1 = frstore.collection("users").document(uid);
                                     DocumentReference dref2 = frstore.collection("posts").document(uid+"_postNo"+String.valueOf(postNo));
                                     dref1.collection("posts").document("postNo"+String.valueOf(postNo)).set(userpost).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void unused) {
+                                             userpost.put("uid",uid);
                                             dref2.set(userpost).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void unused) {
                                                     Log.d("Tag", "SUCCESS");
-                                                    pbar.setVisibility(view.GONE);
+                                                    pbar.setVisibility(View.GONE);
                                                     sub.setText("");
                                                     topic.setText("");
                                                     postcontent.setText("");
@@ -233,22 +240,8 @@ public class CreateNewFragment extends Fragment {
                             });
                         }
                     });
-                }
-                else {
 
-                    userpost.put("Subject", subject);
-                    userpost.put("Topic", Topic);
-                    userpost.put("Content", Content);
-                    DocumentReference dref = frstore.collection("posts").document(uid);
-                    dref.collection("postNo"+String.valueOf(postNo)).add(userpost).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            Log.d("Tag", "SUCCESS");
-                            pbar.setVisibility(view.GONE);
-                        }
-                    });
-                    Toast.makeText(getContext(), "Post Uploaded", Toast.LENGTH_SHORT).show();
-                }
+
             }
         });
 //END OF LISTENER FOR POST BUTTON

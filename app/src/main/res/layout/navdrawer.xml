@@ -6,11 +6,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_gravity="start"
     android:fitsSystemWindows="true"
-    tools:openDrawer="start"
+    tools:openDrawer="star"
     android:id="@+id/dlayout">
 
-    <include layout="@layout/toolbar"/>
-    <include layout="@layout/bottomnavbar"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <include
+            layout="@layout/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_bar"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/bottom_bar"
+            layout="@layout/bottomnavbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

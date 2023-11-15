@@ -70,8 +70,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        //finding ids
+//FINDING IDS
         dlay=findViewById(R.id.dlayout);
         navview=findViewById(R.id.naviview);
         toolbar=findViewById(R.id.tbar);
@@ -113,15 +112,10 @@ public class MainActivity extends AppCompatActivity {
         backbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(tbtitle.equals("My Posts")) {
-                    btnav.setItemActiveIndex(0);
-                    loadfrag(new ProfileFragment(), false, "Profile");
-                }
-                else
-                {
+
                     btnav.setItemActiveIndex(1);
-                    loadfrag(new DiscussionFragment(),true,"Discussions");
-                }
+                    loadfrag(new DiscussionFragment(),false,"Discussions");
+
             }
         });
 
@@ -158,11 +152,15 @@ public class MainActivity extends AppCompatActivity {
                 int id=item.getItemId();
                 if(id==R.id.userprofile)
                 {
-
+                    loadfrag(new ProfileFragment(),false,"Profile");
                 }
                 else if (id==R.id.settings)
                 {
-
+                    startActivity(new Intent(MainActivity.this,SettingsActivity.class));
+                }
+                else if(id==R.id.about)
+                {
+                    startActivity(new Intent(MainActivity.this,About.class));
                 }
                 else if(id==R.id.logout)
                 {

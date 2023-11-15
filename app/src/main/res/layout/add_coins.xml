@@ -22,7 +22,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginBottom="10dp"
-            android:src="@drawable/spndcoin"/>
+            android:src="@drawable/dollar2"/>
        <EditText
            android:id="@+id/edcoins"
            android:layout_width="150dp"

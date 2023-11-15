@@ -17,30 +17,31 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class RecyclerAdapterMyposts extends RecyclerView.Adapter<RecyclerAdapterMyposts.ViewHolder>{
+public class RecyclerAdapterMynotes extends RecyclerView.Adapter<RecyclerAdapterMynotes.ViewHolder> {
 
     Context context;
-    ArrayList<postsClass>arrlist;
+    ArrayList<postsClass> arrlist;
     User userinfo;
-    RecyclerAdapterMyposts(Context context, ArrayList<postsClass>arrlist,User userinfo)
+
+    RecyclerAdapterMynotes(Context context, ArrayList<postsClass>arrlist,User userinfo)
     {
-       this.context=context;
-       this.arrlist=arrlist;
-       this.userinfo=userinfo;
+        this.context=context;
+        this.arrlist=arrlist;
+        this.userinfo=userinfo;
     }
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v=LayoutInflater.from(context).inflate(R.layout.myposts_row,parent,false);
+        View v= LayoutInflater.from(context).inflate(R.layout.mynotes_row,parent,false);
         ViewHolder viewHolder=new ViewHolder(v);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-         holder.Name.setText(userinfo.Name);
-         holder.Institute.setText(userinfo.Institute);
-         holder.Country.setText(userinfo.Country);
+    public void onBindViewHolder(@NonNull RecyclerAdapterMynotes.ViewHolder holder, int position) {
+        holder.Name.setText(userinfo.Name);
+        holder.Institute.setText(userinfo.Institute);
+        holder.Country.setText(userinfo.Country);
         if(!(userinfo.Profilepic.equals("")))
         {
             Uri dpuri=Uri.parse(userinfo.Profilepic);
@@ -49,11 +50,11 @@ public class RecyclerAdapterMyposts extends RecyclerView.Adapter<RecyclerAdapter
         holder.Subject.setText(arrlist.get(position).subject);
         holder.Topic.setText(arrlist.get(position).topic);
         holder.Content.setText(arrlist.get(position).content);
-       if(!(arrlist.get(position).picuri.equals("")))
+        if(!(arrlist.get(position).picuri.equals("")))
         {
             if(arrlist.get(position).postType.equals(1)) {
-            Uri dpuri=Uri.parse(arrlist.get(position).picuri);
-            Picasso.get().load(dpuri).placeholder(R.drawable.addimage).into(holder.Postimage);
+                Uri dpuri=Uri.parse(arrlist.get(position).picuri);
+                Picasso.get().load(dpuri).placeholder(R.drawable.addimage).into(holder.Postimage);
             }
             else {
                 holder.Postimage.setImageResource(R.drawable.pdf2);
@@ -67,10 +68,10 @@ public class RecyclerAdapterMyposts extends RecyclerView.Adapter<RecyclerAdapter
         return arrlist.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
-          CircleImageView image;
-          TextView Name,Institute,Country,Subject,Topic,Content;
-          ImageView Postimage;
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        CircleImageView image;
+        TextView Name,Institute,Country,Subject,Topic,Content;
+        ImageView Postimage;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             image=itemView.findViewById(R.id.profilepicture);
